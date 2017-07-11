@@ -1,0 +1,74 @@
+<html>
+<head>
+  <title>Lake Tahoe </title>
+
+  <!-- css \/ -->
+  <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> <!-- Currently using Bootstrap 3.3.7 -->
+  <!-- <link href="css/bootstrap-slider.min.css" rel="stylesheet"> <!--For transparency slider -->
+
+  <style>
+  html, body, #map {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  </style>
+
+  <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" /> <!-- Leaflet CSS -->
+  <link rel="stylesheet" type="text/css" href="css/main.css" />
+  <link rel="stylesheet" type="text/css" href="css/main.css" />
+  <link rel="stylesheet" type="text/css" href="css/leaflet.css" />
+  <link rel="stylesheet" type="text/css" href="css/leaflet.draw.css" />
+
+</head>
+<body>
+  <div id="map"></div>
+
+  <div id='Title'>
+  Lake Tahoe Recreation Area
+  </div>
+
+  <div id="searchbox">
+  <input type="text" name="ad" value="" id="ad" size="20" />
+  <button type="button" id="searchButton">Search</button>
+  </div>
+
+  <div id="filter">
+  <input type="radio" name="filter" value="all" checked>Show All Recreation Locations</input>
+  </div>
+
+  <div id="hiking">
+  <input type="radio" name="filter" id="Hiking">Hiking Sites Only</input>
+  </div>
+
+  <div id="form">
+    <p>Click on the map to find the five closest recreation activities to that location</p>
+    <form action="">
+      <input type="button" onclick="showAll()" value="Reset Map">
+    </form>
+  </div>
+
+  <script type="infowindow/html" id="infowindow_template">
+                  <div class="cartodb-popup">
+           <a href="#close" class="cartodb-popup-close-button close">x</a>
+
+               <div class="cartodb-popup-content-wrapper">
+                 <div class="cartodb-popup-content">
+                   // fields to show
+                 </div>
+               </div>
+               <div class="cartodb-popup-tip-container"></div>
+            </div>
+          </script>
+
+
+  <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+  <script src="js/main.js"></script>
+
+
+
+ </body>
+</html>

@@ -1,0 +1,68 @@
+#searchButton {
+  position: fixed;
+  right: 10px;
+  bottom: 25px;
+  background-color:rgba(255,255,255,1);
+  width:auto;
+  height:auto;
+  z-index: 1000;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top:0;
+  padding-bottom: 5px;
+  }
+#searchBox {
+  position: fixed;
+  right: 70px;
+  bottom: 20px;
+  /*background-color:rgba(255,255,255,1);*/
+  width:auto;
+  height:auto;
+  z-index: 1000;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top:0;
+  padding-bottom: 5px;
+  }
+#hiking {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  background-color:rgba(255,255,255,1);
+  width:auto;
+  height:auto;
+  z-index: 1000;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top:0;
+  padding-bottom: 5px;
+  }
+
+#filter {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  background-color:rgba(255,255,255,1);
+  width:auto;
+  height:auto;
+  z-index: 1000;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top:0;
+  padding-bottom: 5px;
+  }
+#title {
+  position: fixed;
+  left: 50px;
+  top: 20px;
+  /*background-color:rgba(255,255,255,1);*/
+  font-size: 36;
+  font: "helvetica";
+  width:auto;
+  height:auto;
+  z-index: 1000;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top:0;
+  padding-bottom: 5px;
+  }
