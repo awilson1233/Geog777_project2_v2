@@ -16,10 +16,12 @@
 
   <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" /> <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@0.4.9/dist/leaflet.draw.css" />
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
   <link rel="stylesheet" type="text/css" href="css/main.css" />
   <link rel="stylesheet" type="text/css" href="css/main.css" />
   <link rel="stylesheet" type="text/css" href="css/leaflet.css" />
-  <link rel="stylesheet" type="text/css" href="css/leaflet.draw.css" />
+  <!-- <link rel="stylesheet" type="text/css" href="css/leaflet.draw.css" /> -->
 
 </head>
 <body>
@@ -34,22 +36,52 @@
   <button type="button" id="searchButton">Search</button>
   </div>
 
-  <div id="filter">
+  <!-- <div id="filter">
   <input type="radio" name="filter" value="all" checked>Show All Recreation Locations</input>
-  </div>
+  </div> -->
 
-  <div id="hiking">
+  <!-- <div id="hiking">
   <input type="radio" name="filter" id="Hiking">Hiking Sites Only</input>
-  </div>
+  </div> -->
 
   <div id="form">
-    <div id="text"
+    <!-- <div id="text"
     text=<p>Click on the map to find the closest recreation activities to that location</p>
-    </div>
+    </div> -->
     <form action="">
       <input type="button" onclick="showAll()" value="Reset Map">
+      <input type="button" onclick="startEdits()" value="Click to Start Editing">
+      <input type="button" onclick="stopEdits()" value="Stop Your Editing Session">
+      <div id="dialog" title="Point Information">
+        <form>
+          <fieldset>
+            <label for="username">Your Name</label>
+            <input type="text" name="username" id="username" placeholder="Enter your Name" class="text ui-widget-content ui-corner-all">
+            <label for="description">About this Point</label>
+            <input type="text" name="description" id="description" placeholder="Description for this point" class="text ui-widget-content ui-corner-all">
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+          </fieldset>
+        </form>
+      </div>
     </form>
   </div>
+
+  <div>
+  <input type="button" onclick="startEdits()" value="Click to Start Editing">
+  <input type="button" onclick="stopEdits()" value="Stop Your Editing Session">
+  </div>
+
+  <!-- <div id="dialog" title="Point Information">
+    <form>
+      <fieldset>
+        <label for="username">Your Name</label>
+        <input type="text" name="username" id="username" placeholder="Enter your Name" class="text ui-widget-content ui-corner-all">
+        <label for="description">About this Point</label>
+        <input type="text" name="description" id="description" placeholder="Description for this point" class="text ui-widget-content ui-corner-all">
+        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+      </fieldset>
+    </form>
+  </div> -->
 
   <script type="infowindow/html" id="infowindow_template">
                   <div class="cartodb-popup">
@@ -67,8 +99,12 @@
 
   <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
   <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script src="https://unpkg.com/leaflet-draw@0.4.9/dist/leaflet.draw.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+  <!-- <script src="js/leaflet.draw.js"></script> -->
   <script src="js/main2.js"></script>
+
 
 
 

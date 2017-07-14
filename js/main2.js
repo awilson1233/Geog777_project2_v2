@@ -334,11 +334,11 @@ var sqlQueryAddData = "SELECT * FROM data_collector";
 
 // Get CARTO selection as GeoJSON and Add to Map
 function getGeoJSON(){
-  $.getJSON("https://"+cartoDBUserName2+".cartodb.com/api/v2/sql?format=GeoJSON&q="+sqlQueryAddData, function(data) {
+  $.getJSON("https://"+cartoDBUserName2+".carto.com/api/v2/sql?format=GeoJSON&q="+sqlQueryAddData, function(data) {
     cartoDBPoints = L.geoJson(data,{
       pointToLayer: function(feature,latlng){
         var marker = L.marker(latlng);
-        marker.bindPopup('' + feature.properties.description + 'Submitted by ' + feature.properties.name + '');
+        marker.bindPopup('' + feature.properties.description + ' submitted by ' + feature.properties.name + '');
         return marker;
       }
     }).addTo(map);
@@ -350,23 +350,156 @@ $( document ).ready(function() {
   getGeoJSON();
 });
 
+// Initialise the FeatureGroup to store editable layers
+var drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
+
+
+// Initialise the draw control and pass it the FeatureGroup of editable layers
+// var drawControl = new L.Control.Draw({
+//   edit: {
+//     featureGroup: drawnItems
+//   }
+// });
+
 // Create Leaflet Draw Control for the draw tools and toolbox
 var drawControl = new L.Control.Draw({
   draw : {
+    marker: true,
     polygon : true,
     polyline : false,
     rectangle : false,
     circle : false
   },
-  edit : true,
-  remove: true
+  edit: {
+    featureGroup: drawnItems
+  },
+  remove: false
 });
+
+// map.addControl(drawControl);
+
+map.on(L.Draw.Event.CREATED, function (e) {
+  var type = e.layerType
+  var layer = e.layer;
+
+  // Do whatever else you need to. (save to db, add to map etc)
+
+  drawnItems.addLayer(layer);
+});
+
+
+// Create Leaflet Draw Control for the draw tools and toolbox
+//var drawControl = L.Toolbar()
+
+//   draw : {
+//     polygon : true,
+//     polyline : false,
+//     rectangle : false,
+//     circle : false
+//   },
+//   edit : true,
+//   remove: true
+// });
 
 // Boolean global variable used to control visiblity
 var controlOnMap = false;
 
 // Create variable for Leaflet.draw features
 var drawnItems = new L.FeatureGroup();
+
+// Function to add the draw control to the map to start editing
+function startEdits(){
+  if(controlOnMap == true){
+    map.removeControl(drawControl);
+    controlOnMap = false;
+  }
+  map.addControl(drawControl);
+  controlOnMap = true;
+};
+
+// Function to remove the draw control from the map
+function stopEdits(){
+  map.removeControl(drawControl);
+  controlOnMap = false;
+};
+
+// Use the jQuery UI dialog to create a dialog and set options
+var dialog = $("#dialog").dialog({
+  autoOpen: false,
+  height: 300,
+  width: 350,
+  modal: true,
+  position: {
+    my: "center center",
+    at: "center center",
+    of: "#map"
+  },
+  buttons: {
+    "Add to Database": setData,
+    Cancel: function() {
+      dialog.dialog("close");
+      map.removeLayer(drawnItems);
+    }
+  },
+  close: function() {
+    // form[ 0 ].reset();
+    console.log("Dialog closed");
+  }
+});
+
+// Stops default form submission and ensures that setData or the cancel function run
+var form = dialog.find("form").on("submit", function(event) {
+  event.preventDefault();
+});
+
+// Function to run when feature is drawn on map
+map.on('draw:created', function (e) {
+  var layer = e.layer;
+  drawnItems.addLayer(layer);
+  map.addLayer(drawnItems);
+  dialog.dialog("open");
+});
+
+// $("#dialog").dialog()
+
+
+function setData() {
+    var enteredUsername = username.value;
+    var enteredDescription = description.value;
+    drawnItems.eachLayer(function (layer) {
+        var sql = "INSERT INTO data_collector (the_geom, name, description, latitude, longitude) VALUES (ST_SetSRID(ST_GeomFromGeoJSON('";
+        var a = layer.getLatLng();
+        var sql2 ='{"type":"Point","coordinates":[' + a.lng + "," + a.lat + "]}'),4326),'" + enteredDescription + "','" + enteredUsername + "','" + a.lat + "','" + a.lng +"')";
+        var pURL = sql+sql2;
+        submitToProxy(pURL);
+        console.log("Feature has been submitted to the Proxy");
+    });
+    map.removeLayer(drawnItems);
+    drawnItems = new L.FeatureGroup();
+    console.log("drawnItems has been cleared");
+    dialog.dialog("close");
+};
+// Submit data to the PHP using a jQuery Post method
+ var submitToProxy = function(q){
+   $.post("php/callProxy.php", {
+     qurl:q,
+     cache: false,
+     timeStamp: new Date().getTime()
+   }, function(data) {
+     console.log(data);
+     refreshLayer();
+   });
+ };
+
+// refresh the layers to show the updated dataset
+function refreshLayer() {
+ if (map.hasLayer(cartoDBPoints)) {
+   map.removeLayer(cartoDBPoints);
+ };
+ getGeoJSON();
+};
+
 
 // Function to add the draw control to the map to start editing
 function startEdits(){
@@ -391,68 +524,3 @@ map.on('draw:created', function (e) {
   map.addLayer(drawnItems);
   dialog.dialog("open");
 });
-
-// Use the jQuery UI dialog to create a dialog and set options
-var dialog = $("#dialog").dialog({
-  autoOpen: false,
-  height: 300,
-  width: 350,
-  modal: true,
-  position: {
-    my: "center center",
-    at: "center center",
-    of: "#map"
-  },
-  buttons: {
-    "Add to Database": setData,
-    Cancel: function() {
-      dialog.dialog("close");
-      map.removeLayer(drawnItems);
-    }
-  },
-  close: function() {
-    form[ 0 ].reset();
-    console.log("Dialog closed");
-  }
-});
-
-// Stops default form submission and ensures that setData or the cancel function run
-var form = dialog.find("form").on("submit", function(event) {
-  event.preventDefault();
-});
-
-function setData() {
-    var enteredUsername = username.value;
-    var enteredDescription = description.value;
-    drawnItems.eachLayer(function (layer) {
-        var sql = "INSERT INTO data_collector (the_geom, name, description, latitude, longitude) VALUES (ST_SetSRID(ST_GeomFromGeoJSON('";
-        var a = layer.getLatLng();
-        var sql2 ='{"type":"Point","coordinates":[' + a.lng + "," + a.lat + "]}'),4326),'" + enteredDescription + "','" + enteredUsername + "','" + a.lat + "','" + a.lng +"')";
-        var pURL = sql+sql2;
-        submitToProxy(pURL);
-        console.log("Feature has been submitted to the Proxy");
-    });
-    map.removeLayer(drawnItems);
-    drawnItems = new L.FeatureGroup();
-    console.log("drawnItems has been cleared");
-    dialog.dialog("close");
-};
-// Submit data to the PHP using a jQuery Post method
-   var submitToProxy = function(q){
-     $.post("php/callProxy.php", {
-       qurl:q,
-       cache: false,
-       timeStamp: new Date().getTime()
-     }, function(data) {
-       console.log(data);
-       refreshLayer();
-     });
-   };
-
-// refresh the layers to show the updated dataset
-function refreshLayer() {
- if (map.hasLayer(cartoDBPoints)) {
-   map.removeLayer(cartoDBPoints);
- };
- getGeoJSON();
-};
