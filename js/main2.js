@@ -14,7 +14,7 @@ basemap.addTo(map);
 var cartoCSSPeaks = "#layer { "+
     //"marker-width: ramp([elevation], range(2, 8)," +
     //"quantiles(5));" +
-    "marker-width: 8;" +
+    "marker-width: 10;" +
     "marker-fill: #594316;" +
     "marker-fill-opacity: 0.9;" +
     "marker-allow-overlap: true;" +
@@ -25,7 +25,7 @@ var cartoCSSPeaks = "#layer { "+
   "}"
 
 var cartoCSSRecreationActivity = "#layer {" +
-  "marker-width: 8;" +
+  "marker-width: 10;" +
   "marker-fill: #FFB927;" +
   "marker-fill-opacity: 0.9;" +
   "marker-allow-overlap: true;" +
@@ -35,13 +35,13 @@ var cartoCSSRecreationActivity = "#layer {" +
 "}"
 
 var cartoCSSBikeTrails = "#layer {" +
-  "line-width: 1.5;" +
+  "line-width: 2;" +
   "line-color: #d34dee;" +
   "line-opacity: 1;" +
 "}"
 
 var cartoCSSTrails = "#layer {" +
-  "line-width: 1.5;" +
+  "line-width: 2;" +
   "line-color: #1b8d63;" +
   "line-opacity: 1;" +
 "}"
