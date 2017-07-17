@@ -70,7 +70,6 @@ var cartoCSSRiver = "#layer {" +
   "line-opacity: 1;" +
 "}"
 
-//var peaksAreOn = false;
 
 var peaks, recreationActivity, bikeTrails, trails, recreationFacility, river, scenicPoints
 
@@ -232,42 +231,6 @@ $options.click(function(e) {
 });
 
 
-// var cartoCSSSoils = "#layer {" +
-//   "polygon-fill: ramp([muname],(#5F4690, #1D6996, #38A6A5, #0F8554, #73AF48, #EDAD08, #E17C05, #CC503E, #94346E, #6255a5, #666666), ("Cagwin-Rock outcrop complex, 15 to 30 percent slopes, extremely stony", "Cagwin Rock outcrop complex, 30 to 50 percent slopes, extremely stony", "Cassenai gravelly loamy coarse sand, 30 to 50 percent slopes, very stony", "Cassenai gravelly loamy coarse sand, 15 to 30 percent slopes, very stony", "Temo-Witefels complex, 30 to 50 percent slopes", "Oxyaquic Cryorthents-Aquic Xerorthents-Tahoe complex, 0 to 15 percent slopes", "Cagwin-Rock outcrop complex, 5 to 15 percent slopes, extremely stony", "Cagwin-Rock outcrop complex, 50 to 70 percent slopes, extremely stony", "Temo-Witefels complex, 15 to 30 percent slopes", "Water"), "=");"
-//   "line-width: 1;" +
-//   "line-color: #FFF;" +
-//   "line-opacity: 0.5;" +
-// "}"
-
-//add data to map
-// cartodb.createLayer(map, {
-//     user_name: 'wilson38',
-//     type: 'cartodb',
-//     sublayers: [{type: "cartodb",
-//     sql: 'SELECT * FROM soil_survey_2003',
-//     cartocss: cartoCSSSoils,
-//     layerIndex: 6
-// }]
-// }, { https: true })
-//
-// .addTo(map)
-
-// load main() function
-// window.onload = main;
-// };
-
-// var layers = {
-//     "River": river,
-//     "Scenic Points": scenicPoints,
-//     "Peaks": peaks,
-//     "Recreation Activities": recreationActivity,
-//     "Bike Trails": bikeTrails,
-//     "Trails": trails,
-//     "Recreation Facilities": recreationFacility,
-// };
-//
-// L.control.layers(layers).addTo(map);
-
 $('#searchButton').click(function(){
   input = $( "#ad").val();
   var sql = new cartodb.SQL({ user: 'wilson38' });
@@ -287,13 +250,6 @@ var myLocation = null;
 
 // Set Global Variable that will hold the marker that goes at our location when found
 var locationMarker = null;
-
-
-// Set 'Your Location' icon
-// var redIcon = L.icon({
-//     iconUrl: 'img/redIcon.png',
-//     iconAnchor: [13, 41]
-// });
 
 // Listen for a click event on the Map element
 map.on('click', locationFound);
