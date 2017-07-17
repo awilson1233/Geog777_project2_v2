@@ -24,28 +24,6 @@ var cartoCSSPeaks = "#layer { "+
 
   "}"
 
-var peaksAreOn = false;
-
-//add data to map
-var peaks = cartodb.createLayer(map, {
-    user_name: 'wilson38',
-    type: 'cartodb',
-    sublayers: [{type: "cartodb",
-    sql: 'SELECT * FROM peaks',
-    cartocss: cartoCSSPeaks,
-
-}]
-}, { https: true })
-
-.addTo(map)
-  .done(function(layer) {
-            // add infowindow
-            cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['name', 'elevation'])
-          });
-
-
-
-
 var cartoCSSRecreationActivity = "#layer {" +
   "marker-width: 8;" +
   "marker-fill: #FFB927;" +
@@ -56,68 +34,17 @@ var cartoCSSRecreationActivity = "#layer {" +
   "marker-line-opacity: 1;" +
 "}"
 
-//add data to map
-var recreationActivity = cartodb.createLayer(map, {
-    user_name: 'wilson38',
-    type: 'cartodb',
-    sublayers: [{type: "cartodb",
-    sql: 'SELECT * FROM recreationactivities',
-    cartocss: cartoCSSRecreationActivity,
-
-}]
-}, { https: true })
-
-.addTo(map)
-  .done(function(layer) {
-            // add infowindow
-            cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['recareanam', 'parentacti', 'openstatus', 'latitude', 'longitude'])
-          });
-
 var cartoCSSBikeTrails = "#layer {" +
   "line-width: 1.5;" +
   "line-color: #d34dee;" +
   "line-opacity: 1;" +
 "}"
 
-//add data to map
-var bikeTrails = cartodb.createLayer(map, {
-    user_name: 'wilson38',
-    type: 'cartodb',
-    sublayers: [{type: "cartodb",
-    sql: 'SELECT * FROM bike_trails_proposed',
-    cartocss: cartoCSSBikeTrails,
-
-}]
-}, { https: true })
-
-.addTo(map)
-.done(function(layer) {
-          // add infowindow
-          cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['name', 'miles', 'from_', 'to_'])
-        });
-
 var cartoCSSTrails = "#layer {" +
   "line-width: 1.5;" +
   "line-color: #1b8d63;" +
   "line-opacity: 1;" +
 "}"
-
-//add data to map
-var trails = cartodb.createLayer(map, {
-    user_name: 'wilson38',
-    type: 'cartodb',
-    sublayers: [{type: "cartodb",
-    sql: 'SELECT * FROM trailnfs',
-    cartocss: cartoCSSTrails,
-
-}]
-}, { https: true })
-
-.addTo(map)
-.done(function(layer) {
-          // add infowindow
-          cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['trail_name', 'segment_le', 'trail_type'])
-        });
 
 var cartoCSSRecreationFacility = "#layer {" +
   "polygon-fill: #d35b7b;" +
@@ -126,23 +53,6 @@ var cartoCSSRecreationFacility = "#layer {" +
   "line-color: #FFF;" +
   "line-opacity: 0.5;" +
 "}"
-
-//add data to map
-var recreationFacility = cartodb.createLayer(map, {
-    user_name: 'wilson38',
-    type: 'cartodb',
-    sublayers: [{type: "cartodb",
-    sql: 'SELECT * FROM recreation_facility',
-    cartocss: cartoCSSRecreationFacility,
-    layerIndex: 5
-}]
-}, { https: true })
-
-.addTo(map)
-.done(function(layer) {
-          // add infowindow
-          cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['facility', 'type', 'fac_open'])
-        });
 
 var cartoCSSScenicShorePoints = "#layer {" +
   "marker-width: 7;" +
@@ -154,45 +64,172 @@ var cartoCSSScenicShorePoints = "#layer {" +
   "marker-line-opacity: 1;" +
 "}"
 
-//add data to map
-var scenicPoints = cartodb.createLayer(map, {
-    user_name: 'wilson38',
-    type: 'cartodb',
-    sublayers: [{type: "cartodb",
-    sql: 'SELECT * FROM scenic_shoreline_points',
-    cartocss: cartoCSSScenicShorePoints,
-    layerIndex: 4
-}]
-}, { https: true })
-
-.addTo(map)
-.done(function(layer) {
-          // add infowindow
-          cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['view_type', 'unit_name'])
-        });
-
 var cartoCSSRiver = "#layer {" +
   "line-width: 2.5;" +
   "line-color: #73def9;" +
   "line-opacity: 1;" +
 "}"
 
-//add data to map
-var river = cartodb.createLayer(map, {
-    user_name: 'wilson38',
-    type: 'cartodb',
-    sublayers: [{type: "cartodb",
-    sql: 'SELECT * FROM wildscenicriversegment',
-    cartocss: cartoCSSRiver,
-    layerIndex: 6
-}]
-}, { https: true })
+//var peaksAreOn = false;
 
-.addTo(map)
-.done(function(layer) {
-          // add infowindow
-          cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['gnis_name', 'total_mile'])
-        });
+var peaks, recreationActivity, bikeTrails, trails, recreationFacility, river, scenicPoints
+
+// add cartodb layer with one layer
+cartodb.createLayer(map, {
+  user_name: 'wilson38', // Required
+  type: 'cartodb', // Required
+  sublayers: [
+  { // first sublayer is the one that is painted at the bottom
+      sql: "SELECT * FROM peaks", // Required
+      cartocss: cartoCSSPeaks, // Required
+
+   },
+   { // first sublayer is the one that is painted at the bottom
+       sql: "SELECT * FROM recreationactivities", // Required
+       cartocss: cartoCSSRecreationActivity, // Required
+
+    },
+    { // first sublayer is the one that is painted at the bottom
+        sql: "SELECT * FROM bike_trails_proposed", // Required
+        cartocss: cartoCSSBikeTrails, // Required
+
+     },
+     { // first sublayer is the one that is painted at the bottom
+         sql: "SELECT * FROM trailnfs", // Required
+         cartocss: cartoCSSTrails, // Required
+
+      },
+      { // first sublayer is the one that is painted at the bottom
+          sql: "SELECT * FROM recreation_facility", // Required
+          cartocss: cartoCSSRecreationFacility, // Required
+
+       },
+       { // first sublayer is the one that is painted at the bottom
+           sql: "SELECT * FROM wildscenicriversegment", // Required
+           cartocss: cartoCSSRiver, // Required
+
+        },
+       { // first sublayer is the one that is painted at the bottom
+           sql: "SELECT * FROM scenic_shoreline_points", // Required
+           cartocss: cartoCSSScenicShorePoints, // Required
+
+        },
+
+  ]
+}).addTo(map)
+.done(function(layer){
+peaks = layer.getSubLayer(0); // declare a layer0 variable
+cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['name', 'elevation'])
+console.log(peaks); // show in the console layer0
+
+recreationActivity = layer.getSubLayer(1); // declare a layer1 variable
+cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(1), ['recareanam', 'parentacti', 'openstatus', 'latitude', 'longitude'])
+console.log(recreationActivity); // show in the console layer1
+
+bikeTrails = layer.getSubLayer(2); // declare a layer1 variable
+cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(2), ['name', 'miles', 'from_', 'to_'])
+console.log(bikeTrails); // show in the console layer1
+
+trails = layer.getSubLayer(3); // declare a layer1 variable
+cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(3), ['trail_name', 'segment_le', 'trail_type'])
+console.log(trails); // show in the console layer1
+
+recreationFacility = layer.getSubLayer(4); // declare a layer1 variable
+cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(4), ['facility', 'type', 'fac_open'])
+console.log(recreationFacility); // show in the console layer1
+
+river = layer.getSubLayer(5); // declare a layer1 variable
+cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(5), ['gnis_name', 'total_mile'])
+console.log(river); // show in the console layer1
+
+scenicPoints = layer.getSubLayer(6); // declare a layer1 variable
+cartodb.vis.Vis.addInfowindow(map, layer.getSubLayer(6), ['view_type', 'unit_name'])
+console.log(scenicPoints); // show in the console layer1
+
+var $options = $('#layer_selector li');
+$options.click(function(e) {
+  // get the area of the selected layer
+  var $li = $(e.target);
+  var legend = $li.attr('id');
+  if(selectedLayer != layer ){
+    // definitely more elegant ways to do this, but went for
+    // ease of understanding
+    if (legend == 'peaks'){
+      layer.getSubLayer(0).show(); // countries
+      layer.getSubLayer(1).hide(); // cables
+      layer.getSubLayer(2).hide();
+      layer.getSubLayer(3).hide();
+      layer.getSubLayer(4).hide();
+      layer.getSubLayer(5).hide();
+      layer.getSubLayer(6).hide(); // populated places
+    }
+    else if (legend == 'recreationActivity') {
+      layer.getSubLayer(0).hide(); // countries
+      layer.getSubLayer(1).show(); // cables
+      layer.getSubLayer(2).hide();
+      layer.getSubLayer(3).hide();
+      layer.getSubLayer(4).hide();
+      layer.getSubLayer(5).hide();
+      layer.getSubLayer(6).hide();
+    }
+    else if (legend == 'bikeTrails') {
+      layer.getSubLayer(0).hide(); // countries
+      layer.getSubLayer(1).hide(); // cables
+      layer.getSubLayer(2).show();
+      layer.getSubLayer(3).hide();
+      layer.getSubLayer(4).hide();
+      layer.getSubLayer(5).hide();
+      layer.getSubLayer(6).hide();
+    }
+    else if (legend == 'trails') {
+      layer.getSubLayer(0).hide(); // countries
+      layer.getSubLayer(1).hide(); // cables
+      layer.getSubLayer(2).hide();
+      layer.getSubLayer(3).show();
+      layer.getSubLayer(4).hide();
+      layer.getSubLayer(5).hide();
+      layer.getSubLayer(6).hide();
+    }
+    else if (legend == 'recreationFacility') {
+      layer.getSubLayer(0).hide(); // countries
+      layer.getSubLayer(1).hide(); // cables
+      layer.getSubLayer(2).hide();
+      layer.getSubLayer(3).hide();
+      layer.getSubLayer(4).show();
+      layer.getSubLayer(5).hide();
+      layer.getSubLayer(6).hide();
+    }
+    else if (legend == 'river') {
+      layer.getSubLayer(0).hide(); // countries
+      layer.getSubLayer(1).hide(); // cables
+      layer.getSubLayer(2).hide();
+      layer.getSubLayer(3).hide();
+      layer.getSubLayer(4).hide();
+      layer.getSubLayer(5).show();
+      layer.getSubLayer(6).hide();
+    }
+    else if (legend == 'scenicPoints') {
+      layer.getSubLayer(0).hide(); // countries
+      layer.getSubLayer(1).hide(); // cables
+      layer.getSubLayer(2).hide();
+      layer.getSubLayer(3).hide();
+      layer.getSubLayer(4).hide();
+      layer.getSubLayer(5).hide();
+      layer.getSubLayer(6).show();
+    }
+    else {
+      layer.getSubLayer(0).show(); // peaks
+      layer.getSubLayer(1).show(); // cables
+      layer.getSubLayer(2).show();
+      layer.getSubLayer(3).show();
+      layer.getSubLayer(4).show();
+      layer.getSubLayer(5).show();
+      layer.getSubLayer(6).show();
+    }
+  }
+});
+
+});
 
 
 // var cartoCSSSoils = "#layer {" +
@@ -219,17 +256,17 @@ var river = cartodb.createLayer(map, {
 // window.onload = main;
 // };
 
-var layers = {
-    "River": river,
-    "Scenic Points": scenicPoints,
-    "Peaks": peaks,
-    "Recreation Activities": recreationActivity,
-    "Bike Trails": bikeTrails,
-    "Trails": trails,
-    "Recreation Facilities": recreationFacility,
-};
-
-L.control.layers(layers).addTo(map);
+// var layers = {
+//     "River": river,
+//     "Scenic Points": scenicPoints,
+//     "Peaks": peaks,
+//     "Recreation Activities": recreationActivity,
+//     "Bike Trails": bikeTrails,
+//     "Trails": trails,
+//     "Recreation Facilities": recreationFacility,
+// };
+//
+// L.control.layers(layers).addTo(map);
 
 $('#searchButton').click(function(){
   input = $( "#ad").val();
@@ -244,37 +281,6 @@ var sqlQuery = "SELECT * FROM recreationactivities";
 var sqlQueryHiking = "SELECT * FROM recreationactivities WHERE parentacti='Hiking'"
 var cartoDBUserName = "wilson38";
 // Function to add all coffee shops
-function showAll(){
-    if(map.hasLayer(recreationLocations)){
-        map.removeLayer(recreationLocations);
-    };
-    // Get CARTO selection as GeoJSON and Add to Map
-    $.getJSON("https://"+cartoDBUserName+".carto.com/api/v2/sql?format=GeoJSON&q="+sqlQuery, function(data) {
-        recreationLocations = L.geoJson(data,{
-            onEachFeature: function (feature, layer) {
-                layer.bindPopup('<p><b>' + feature.properties.recareanam + '</b><br /><em>' + feature.properties.parentacti + '</em></p>');
-                layer.cartodb_id=feature.properties.cartodb_id;
-            }
-        }).addTo(map);
-    });
-};
-
-// Run showAll function automatically when document loads
-$( document ).ready(function() {
-  showAll();
-});
-
-// Event Listeners
-$('input[value=Hiking]').click(function(){
-  showHiking();
-});
-
-$('input[value=all]').click(function(){
-  showAll();
-});
-
-
-// Find five closest Recreation Activities
 
 // Set Global Variable that will hold your location
 var myLocation = null;
@@ -350,11 +356,7 @@ var geojsonMarkerOptions = {
         opacity: 1,
         fillOpacity: 0.8
     };
-    // L.geoJson(data, {
-    //     pointToLayer: function (feature, latlng) {
-    //         return L.circleMarker(latlng, geojsonMarkerOptions);
-    //     }
-    // }).addTo(map);
+
 // Get CARTO selection as GeoJSON and Add to Map
 function getGeoJSON(){
   $.getJSON("https://"+cartoDBUserName2+".carto.com/api/v2/sql?format=GeoJSON&q="+sqlQueryAddData, function(data) {
@@ -362,7 +364,15 @@ function getGeoJSON(){
       pointToLayer: function(feature,latlng){
         //var marker = L.marker(latlng);
         marker.bindPopup('' + feature.properties.description + ' submitted by ' + feature.properties.name + '');
-        return L.circleMarker(latlng, geojsonMarkerOptions);
+        //return L.circleMarker(latlng, geojsonMarkerOptions);
+      },
+    style:  {
+        radius: 8,
+        fillColor: "#ff7800",
+        color: "#fff",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8,
       }
     }).addTo(map);
   });
@@ -378,19 +388,12 @@ var drawnItems = new L.FeatureGroup();
 map.addLayer(drawnItems);
 
 
-// Initialise the draw control and pass it the FeatureGroup of editable layers
-// var drawControl = new L.Control.Draw({
-//   edit: {
-//     featureGroup: drawnItems
-//   }
-// });
-
 // Create Leaflet Draw Control for the draw tools and toolbox
 var drawControl = new L.Control.Draw({
   draw : {
     marker: true,
-    polygon : true,
-    polyline : true,
+    polygon : false,
+    polyline : false,
     rectangle : false,
     circle : false
   },
@@ -410,20 +413,6 @@ map.on(L.Draw.Event.CREATED, function (e) {
 
   drawnItems.addLayer(layer);
 });
-
-
-// Create Leaflet Draw Control for the draw tools and toolbox
-//var drawControl = L.Toolbar()
-
-//   draw : {
-//     polygon : true,
-//     polyline : false,
-//     rectangle : false,
-//     circle : false
-//   },
-//   edit : true,
-//   remove: true
-// });
 
 // Boolean global variable used to control visiblity
 var controlOnMap = false;
@@ -548,3 +537,8 @@ map.on('draw:created', function (e) {
   map.addLayer(drawnItems);
   dialog.dialog("open");
 });
+
+var selectedLayer;
+  // create layer selector
+  // function createSelector(layers) {
+  //   var sql = new cartodb.SQL({ user: 'documentation' });
