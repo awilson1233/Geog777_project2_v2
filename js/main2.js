@@ -219,7 +219,17 @@ var river = cartodb.createLayer(map, {
 // window.onload = main;
 // };
 
-L.control.layers(river, scenicPoints, peaks, recreationActivity, bikeTrails, trails, recreationFacility).addTo(map);
+var layers = {
+    "River": river,
+    "Scenic Points": scenicPoints,
+    "Peaks": peaks,
+    "Recreation Activities": recreationActivity,
+    "Bike Trails": bikeTrails,
+    "Trails": trails,
+    "Recreation Facilities": recreationFacility,
+};
+
+L.control.layers(layers).addTo(map);
 
 $('#searchButton').click(function(){
   input = $( "#ad").val();
@@ -332,14 +342,27 @@ var cartoDBUserName2 = "wilson38";
 // Name of table is 'data_collector'
 var sqlQueryAddData = "SELECT * FROM data_collector";
 
+var geojsonMarkerOptions = {
+        radius: 8,
+        fillColor: "#ff7800",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    };
+    // L.geoJson(data, {
+    //     pointToLayer: function (feature, latlng) {
+    //         return L.circleMarker(latlng, geojsonMarkerOptions);
+    //     }
+    // }).addTo(map);
 // Get CARTO selection as GeoJSON and Add to Map
 function getGeoJSON(){
   $.getJSON("https://"+cartoDBUserName2+".carto.com/api/v2/sql?format=GeoJSON&q="+sqlQueryAddData, function(data) {
     cartoDBPoints = L.geoJson(data,{
       pointToLayer: function(feature,latlng){
-        var marker = L.marker(latlng);
+        //var marker = L.marker(latlng);
         marker.bindPopup('' + feature.properties.description + ' submitted by ' + feature.properties.name + '');
-        return marker;
+        return L.circleMarker(latlng, geojsonMarkerOptions);
       }
     }).addTo(map);
   });
@@ -367,14 +390,14 @@ var drawControl = new L.Control.Draw({
   draw : {
     marker: true,
     polygon : true,
-    polyline : false,
+    polyline : true,
     rectangle : false,
     circle : false
   },
   edit: {
     featureGroup: drawnItems
   },
-  remove: false
+  remove: true
 });
 
 // map.addControl(drawControl);
@@ -480,6 +503,7 @@ function setData() {
     console.log("drawnItems has been cleared");
     dialog.dialog("close");
 };
+
 // Submit data to the PHP using a jQuery Post method
  var submitToProxy = function(q){
    $.post("php/callProxy.php", {
